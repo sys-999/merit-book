@@ -3,155 +3,251 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>赛博修仙 V5.1</title>
+<title>赛博修仙 V6.0</title>
 <style>
-  body{font-family:sans-serif;background:#0d1117;color:#c9d1d9;margin:0;padding:10px;display:flex;flex-direction:column;align-items:center;min-height:100vh}
-  #app{width:100%;max-width:800px;padding-bottom:80px}
-  .box{background:rgba(22,27,34,0.8);border:1px solid #30363d;border-radius:12px;padding:15px;margin-bottom:15px;text-align:center}
-  #score{font-size:3rem;color:#ffd700;text-shadow:0 0 10px rgba(255,215,0,0.4);margin:5px 0;font-weight:800}
-  .grid{display:flex;gap:10px}
-  .col{flex:1}
-  .btn{width:100%;padding:12px;margin-bottom:8px;border:none;border-radius:6px;color:#fff;font-weight:bold;display:flex;justify-content:space-between;cursor:pointer}
-  .btn.g{background:#238636} .btn.b{background:#da3633}
-  canvas{width:100%;background:radial-gradient(circle at bottom,#1c2128,#0d1117);border-radius:12px;display:block}
-  #quote{border-left:3px solid #58a6ff;padding:10px;background:#161b22;margin-bottom:15px;color:#8b949e}
-  .bar{position:fixed;bottom:20px;background:rgba(22,27,34,0.9);padding:10px 20px;border-radius:30px;border:1px solid #333;display:flex;gap:20px;z-index:99}
+  body { font-family: -apple-system, sans-serif; background: #0d1117; color: #c9d1d9; margin: 0; padding: 10px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
+  #app { width: 100%; max-width: 600px; padding-bottom: 80px; }
+  
+  /* 错误日志区 */
+  #debug-console { display: none; background: #300; color: #ff5555; padding: 10px; font-size: 12px; border: 1px solid red; margin-bottom: 10px; white-space: pre-wrap; word-break: break-all; }
+
+  .header-box { background: rgba(22,27,34,0.9); border: 1px solid #30363d; border-radius: 12px; padding: 20px; text-align: center; margin-bottom: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+  #score { font-size: 3.5rem; color: #ffd700; font-weight: 800; margin: 10px 0; text-shadow: 0 0 15px rgba(255, 215, 0, 0.4); line-height: 1; }
+  
+  .quote-box { border-left: 3px solid #58a6ff; background: #161b22; padding: 12px; margin-bottom: 20px; color: #8b949e; font-size: 0.9rem; border-radius: 4px; }
+
+  /* 按钮布局 */
+  .grid { display: flex; gap: 15px; }
+  .col { flex: 1; }
+  .btn { width: 100%; padding: 14px 10px; margin-bottom: 10px; border: none; border-radius: 8px; font-weight: bold; color: #fff; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-size: 0.95rem; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+  .btn:active { transform: scale(0.98); }
+  .btn.g { background: #238636; } 
+  .btn.b { background: #da3633; }
+  .tag { background: rgba(0,0,0,0.2); padding: 2px 6px; border-radius: 4px; font-size: 0.8em; }
+
+  /* 画布 */
+  .canvas-box { position: relative; width: 100%; height: 300px; background: radial-gradient(circle at bottom, #1c2128, #0d1117); border-radius: 12px; border: 1px solid #30363d; overflow: hidden; margin-top: 15px; }
+  canvas { display: block; width: 100%; height: 100%; }
+
+  /* 底部栏 */
+  .bar { position: fixed; bottom: 20px; background: rgba(22,27,34,0.95); backdrop-filter: blur(5px); padding: 8px 25px; border-radius: 50px; border: 1px solid #333; display: flex; gap: 25px; z-index: 100; box-shadow: 0 5px 20px rgba(0,0,0,0.5); }
+  .icon-btn { background: none; border: none; font-size: 1.4rem; cursor: pointer; padding: 0; }
 </style>
 </head>
 <body>
+
+<div id="debug-console"></div>
+
 <div id="app">
-  <div class="box">
-    <h3>🍂 赛博修仙 V5.1</h3>
+  <div class="header-box">
+    <div style="font-size: 1.1em; color: #c9d1d9;">🍂 赛博修仙 V6.0</div>
     <div id="score">0</div>
-    <div style="font-size:0.8em;opacity:0.7">功德金叶</div>
-  </div>
-  <div id="quote">💡 系统正常运行中...</div>
-  
-  <div class="grid">
-    <div class="col" id="g-box"><h4 style="text-align:center;color:#3fb950;margin:0 0 10px 0">✨ 挂金叶</h4></div>
-    <div class="col" id="b-box"><h4 style="text-align:center;color:#f85149;margin:0 0 10px 0">🍂 落枯叶</h4></div>
+    <div style="font-size: 0.8em; opacity: 0.6;">功德金叶</div>
   </div>
 
-  <div style="margin-top:15px;border:1px solid #333;border-radius:12px;overflow:hidden">
+  <div class="quote-box" id="quote">💡 系统初始化中...</div>
+  
+  <div class="grid">
+    <div class="col">
+      <h4 style="text-align:center; color:#3fb950; margin:0 0 10px 0;">✨ 积善</h4>
+      <button class="btn g" onclick="doAct(1)"><span>专注工作/禅修</span><span class="tag">+1</span></button>
+      <button class="btn g" onclick="doAct(1)"><span>念佛/帮人</span><span class="tag">+1</span></button>
+      <button class="btn g" onclick="doAct(1)"><span>赞美/感恩</span><span class="tag">+1</span></button>
+      <button class="btn g" onclick="doAct(1)"><span>自省/早起</span><span class="tag">+1</span></button>
+      <button class="btn g" onclick="doAct(1)"><span>真诚道歉/自我激励</span><span class="tag">+1</span></button>
+    </div>
+    <div class="col">
+      <h4 style="text-align:center; color:#f85149; margin:0 0 10px 0;">🍂 觉察</h4>
+      <button class="btn b" onclick="doAct(0)"><span>说人是非/推脱责任</span><span class="tag">-1</span></button>
+      <button class="btn b" onclick="doAct(0)"><span>发脾气/傲慢</span><span class="tag">-1</span></button>
+      <button class="btn b" onclick="doAct(0)"><span>抱怨/拖延</span><span class="tag">-1</span></button>
+      <button class="btn b" onclick="doAct(0)"><span>贪睡/怂恿</span><span class="tag">-1</span></button>
+      <button class="btn b" onclick="doAct(0)"><span>恶语/沉迷</span><span class="tag">-1</span></button>
+    </div>
+  </div>
+
+  <div class="canvas-box">
     <canvas id="cvs"></canvas>
+    <div style="position:absolute; bottom:5px; right:10px; font-size:10px; color:#555;">V6.0 安全版</div>
   </div>
 </div>
 
 <div class="bar">
-  <button onclick="backup()" style="background:none;border:none;font-size:1.5em">💾</button>
-  <button onclick="restore()" style="background:none;border:none;font-size:1.5em">📤</button>
-  <button onclick="reset()" style="background:none;border:none;font-size:1.5em;color:red">🗑️</button>
+  <button class="icon-btn" onclick="exportData()" title="备份">💾</button>
+  <button class="icon-btn" onclick="importData()" title="恢复">📤</button>
+  <button class="icon-btn" onclick="hardReset()" title="重置" style="filter: grayscale(100%);">🗑️</button>
 </div>
 
 <script>
-// V5.1 极简核心逻辑
-const DATA_KEY = 'GONGDE_V5_LITE';
-const G_Acts = ['专注工作', '禅修', '念佛', '帮人', '赞美', '感恩', '自省', '早起', '真诚道歉', '自我激励'];
-const B_Acts = ['说人是非', '推脱责任', '发脾气', '傲慢', '抱怨', '拖延', '贪睡', '恶语', '怂恿', '沉迷'];
-const Quotes = ["觉察当下，是唯一能改变未来的力量。",
-           "你所经历的每件事，都由你过去的每一个点击所塑造。",
-           "我们无法控制外在世界，但对自身念头，拥有绝对的主权。",
-           "《金刚经》：凡所有相，皆是虚妄。若见诸相非相，即见如来。",
-           "把每一次分心，看作一次提醒，而非一次失败。",
-           "善恶之报，如影随形；不是不报，时候未到。",
-           "习惯的力量在于复利，每天1%的进步，一年是37倍的差距。",
-           "心如工画师，能画诸世间。",
-           "如果一件事令你痛苦，那么使你痛苦的并非这件事本身，而是你对它的判断。",
-           "莫以善小而不为，莫以恶小而为之。"
-            "一念嗔心起，百万障门开。觉察即是关闭障门。",
-            "最好的休息，是换个领域进行深度专注。"];
+// --- 1. 错误捕获系统 ---
+window.onerror = function(msg, url, line) {
+  const div = document.getElementById('debug-console');
+  div.style.display = 'block';
+  div.innerHTML += "⚠️ 错误: " + msg + "<br>📍 行号: " + line + "<br><hr>";
+  return false;
+};
 
-let state = { score:0, leafs:0, dead:0 };
-const cvs = document.getElementById('cvs');
-const ctx = cvs.getContext('2d');
-let tips=[], drops=[], ground=[];
+// --- 2. 核心逻辑 ---
+const KEY = 'GONGDE_V6_SAFE';
+const QUOTES = ["觉察当下，是唯一能改变未来的力量。", "你所经历的每件事，都由你过去的每一个点击所塑造。", "我们无法控制外在世界，但对自身念头，拥有绝对的主权。", "《金刚经》：凡所有相，皆是虚妄。若见诸相非相，即见如来。", "把每一次分心，看作一次提醒，而非一次失败。", "善恶之报，如影随形；不是不报，时候未到。", "习惯的力量在于复利，每天1%的进步，一年是37倍的差距。", "心如工画师，能画诸世间。", "如果一件事令你痛苦，那么使你痛苦的并非这件事本身，而是你对它的判断。", "莫以善小而不为，莫以恶小而为之。", "一念嗔心起，百万障门开。觉察即是关闭障门。", 
+"最好的休息，是换个领域进行深度专注。"];
 
+let state = { score: 0, leafs: 0, dead: 0 }; // 默认状态
+let safeMode = false;
+
+// 启动
 function init() {
   try {
-    let s = localStorage.getItem(DATA_KEY);
+    const s = localStorage.getItem(KEY);
     if(s) state = JSON.parse(s);
-  } catch(e) {}
-  
-  // 生成按钮
-  const gb = document.getElementById('g-box');
-  const bb = document.getElementById('b-box');
-  G_Acts.forEach(t => gb.innerHTML += `<button class="btn g" onclick="act(1)"><span>${t}</span><span>+1</span></button>`);
-  B_Acts.forEach(t => bb.innerHTML += `<button class="btn b" onclick="act(0)"><span>${t}</span><span>-1</span></button>`);
-  
-  renderUI();
-  resize();
-  loop();
-}
-
-function act(isGood) {
-  if(isGood) { state.score+=100; state.leafs++; }
-  else { 
-    if(state.leafs>0) { state.leafs--; state.dead++; drop(false); }
-    else { state.dead++; drop(true); }
-    state.score-=50; 
-  }
-  save(); renderUI();
-}
-
-function save() { localStorage.setItem(DATA_KEY, JSON.stringify(state)); }
-function renderUI() {
-  document.getElementById('score').innerText = state.score;
-  document.getElementById('quote').innerText = "💡 " + Quotes[Math.floor(Math.random()*Quotes.length)];
-}
-
-// 视觉逻辑
-function resize() { cvs.width = cvs.parentElement.clientWidth; cvs.height = 300; }
-function loop() {
-  ctx.clearRect(0,0,cvs.width,cvs.height);
-  
-  // 树
-  tips=[];
-  ctx.strokeStyle='#4a5a6a'; ctx.lineWidth=6; ctx.lineCap='round';
-  drawBranch(cvs.width/2, cvs.height, 80, -90, 5);
-  
-  // 金叶
-  ctx.fillStyle='#ffd700';
-  let drawN = Math.min(state.leafs, 300);
-  for(let i=0; i<drawN; i++) {
-    let t = tips[(i*13)%tips.length];
-    if(t) { ctx.beginPath(); ctx.arc(t.x+Math.sin(i)*15, t.y+Math.cos(i)*15, 3, 0, 7); ctx.fill(); }
+  } catch(e) {
+    console.error(e);
+    safeMode = true; // 开启安全模式（不存盘）
+    document.getElementById('debug-console').style.display = 'block';
+    document.getElementById('debug-console').innerHTML += "⚠️ 提示: 无法读取存储，已开启临时模式。<br>";
   }
   
-  // 落叶与地面
-  ctx.fillStyle='#8b5a2b';
-  // 地面
-  if(ground.length < Math.min(state.dead, 200)) ground.push({x:Math.random()*cvs.width, y:cvs.height-5+Math.random()*5, r:Math.random()*6});
-  ground.forEach(g => { ctx.save(); ctx.translate(g.x,g.y); ctx.rotate(g.r); ctx.fillRect(-3,-2,6,4); ctx.restore(); });
-  
-  // 飘落
-  for(let i=drops.length-1; i>=0; i--) {
-    let d=drops[i]; d.y+=1; d.x+=Math.sin(d.y/20); d.r+=0.1;
-    ctx.save(); ctx.translate(d.x,d.y); ctx.rotate(d.r); ctx.fillRect(-3,-2,6,4); ctx.restore();
-    if(d.y>cvs.height) drops.splice(i,1);
-  }
-  
+  updateUI();
+  updateQuote();
+  resizeCanvas();
   requestAnimationFrame(loop);
 }
 
-function drawBranch(x,y,l,a,d) {
-  let ex = x + l*Math.cos(a*Math.PI/180);
-  let ey = y + l*Math.sin(a*Math.PI/180);
-  ctx.beginPath(); ctx.moveTo(x,y); ctx.lineTo(ex,ey); ctx.stroke();
-  if(d>0) { ctx.lineWidth*=0.7; drawBranch(ex,ey,l*0.7,a-20,d-1); drawBranch(ex,ey,l*0.7,a+20,d-1); ctx.lineWidth/=0.7; }
-  else tips.push({x:ex,y:ey});
+// 交互
+window.doAct = function(isGood) {
+  if(isGood) {
+    state.score += 100; state.leafs++;
+  } else {
+    if(state.leafs > 0) { state.leafs--; state.dead++; dropLeaf(false); }
+    else { state.dead++; dropLeaf(true); }
+    state.score -= 50;
+  }
+  save();
+  updateUI();
+  updateQuote();
+  // 震动
+  if(navigator.vibrate) navigator.vibrate(50);
+};
+
+function save() {
+  if(safeMode) return;
+  try { localStorage.setItem(KEY, JSON.stringify(state)); } catch(e) {}
 }
 
-function drop(voidDrop) {
-  let x = cvs.width/2, y = 100;
-  if(!voidDrop && tips.length>0) { let t=tips[Math.floor(Math.random()*tips.length)]; x=t.x; y=t.y; }
-  drops.push({x:x, y:y, r:0});
+function updateUI() {
+  document.getElementById('score').innerText = state.score;
 }
 
-function backup() { prompt("复制:", btoa(JSON.stringify(state))); }
-function restore() { try{state=JSON.parse(atob(prompt("粘贴:"))); save(); init();}catch(e){} }
-function reset() { if(confirm("清空?")) { localStorage.removeItem(DATA_KEY); location.reload(); } }
+function updateQuote() {
+  const t = QUOTES[Math.floor(Math.random() * QUOTES.length)];
+  document.getElementById('quote').innerText = "💡 " + t;
+}
 
+// --- 3. 视觉系统 ---
+const cvs = document.getElementById('cvs');
+const ctx = cvs.getContext('2d');
+let tips = [], drops = [], ground = [];
+
+function resizeCanvas() {
+  const rect = cvs.parentElement.getBoundingClientRect();
+  cvs.width = rect.width;
+  cvs.height = rect.height;
+}
+
+function loop() {
+  ctx.clearRect(0, 0, cvs.width, cvs.height);
+
+  // 1. 树干
+  tips = [];
+  ctx.strokeStyle = '#3e4c5e'; ctx.lineWidth = 6; ctx.lineCap = 'round';
+  drawBranch(cvs.width/2, cvs.height, 70, -90, 5);
+
+  // 2. 金叶 (限制数量防止卡顿)
+  ctx.fillStyle = '#ffd700';
+  const drawCount = Math.min(state.leafs, 400);
+  for(let i=0; i<drawCount; i++) {
+    const t = tips[(i * 13) % tips.length];
+    if(t) {
+      const offX = Math.sin(i*11) * 15;
+      const offY = Math.cos(i*23) * 15;
+      ctx.beginPath(); ctx.arc(t.x + offX, t.y + offY, 3, 0, Math.PI*2); ctx.fill();
+    }
+  }
+
+  // 3. 落叶动画
+  ctx.fillStyle = '#8b5a2b';
+  // 地面堆积
+  if(ground.length < Math.min(state.dead, 200)) {
+    ground.push({
+      x: Math.random() * cvs.width,
+      y: cvs.height - 5 + Math.random()*5,
+      r: Math.random() * 6
+    });
+  }
+  ground.forEach(g => {
+    ctx.save(); ctx.translate(g.x, g.y); ctx.rotate(g.r); ctx.fillRect(-3,-2,6,4); ctx.restore();
+  });
+
+  // 飘落过程
+  for(let i = drops.length - 1; i >= 0; i--) {
+    let d = drops[i];
+    d.y += 1.5; d.x += Math.sin(d.y/20); d.r += 0.1;
+    ctx.save(); ctx.translate(d.x, d.y); ctx.rotate(d.r); ctx.fillRect(-3,-2,6,4); ctx.restore();
+    if(d.y > cvs.height) drops.splice(i, 1);
+  }
+
+  requestAnimationFrame(loop);
+}
+
+function drawBranch(x, y, len, angle, depth) {
+  const rad = angle * Math.PI / 180;
+  const ex = x + len * Math.cos(rad);
+  const ey = y + len * Math.sin(rad);
+  
+  ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(ex, ey); ctx.stroke();
+  
+  if(depth > 0) {
+    ctx.lineWidth *= 0.75;
+    drawBranch(ex, ey, len*0.75, angle - 20, depth - 1);
+    drawBranch(ex, ey, len*0.75, angle + 20, depth - 1);
+    ctx.lineWidth /= 0.75;
+  } else {
+    tips.push({x: ex, y: ey});
+  }
+}
+
+function dropLeaf(fromVoid) {
+  let x = cvs.width/2, y = 80;
+  if(!fromVoid && tips.length > 0) {
+    const t = tips[Math.floor(Math.random()*tips.length)];
+    x = t.x; y = t.y;
+  }
+  drops.push({x: x, y: y, r: 0});
+}
+
+// --- 4. 数据功能 ---
+window.exportData = function() {
+  const str = btoa(JSON.stringify(state));
+  prompt("复制备份码:", str);
+};
+window.importData = function() {
+  const str = prompt("粘贴备份码:");
+  if(str) {
+    try { state = JSON.parse(atob(str)); save(); alert("恢复成功"); } 
+    catch(e) { alert("无效代码"); }
+  }
+};
+window.hardReset = function() {
+  if(confirm("确定清空重置？")) {
+    localStorage.removeItem(KEY);
+    location.reload();
+  }
+};
+
+// 启动
 window.onload = init;
+// 窗口调整时重置画布
+window.onresize = resizeCanvas;
 </script>
 </body>
 </html>
