@@ -6,7 +6,7 @@
 <title>赛博修仙 · 观心鉴</title>
 <style>
   /* =========================================
-     V8.0 UI核心样式 - 专注于移动端平衡
+     V8.0 UI样式保持不变
   ========================================= */
   :root {
     --bg-primary: #0d1117;
@@ -30,7 +30,6 @@
   
   #app { width: 100%; max-width: 800px; padding-bottom: 110px; }
   
-  /* 头部优化 */
   .header-box { 
     background: linear-gradient(145deg, var(--bg-secondary), var(--bg-primary)); 
     border: 1px solid var(--border-color); border-radius: 16px; padding: 20px; 
@@ -41,30 +40,16 @@
   #score { font-size: 3.5rem; color: var(--accent-gold); font-weight: 800; margin: 0; text-shadow: 0 0 20px rgba(255, 215, 0, 0.4); font-family: monospace; line-height: 1.1;}
   .sub-title { font-size: 0.85em; opacity: 0.6; margin-top: 5px; letter-spacing: 1px; color: var(--accent-blue); }
   
-  /* 语录框 */
   .quote-box { 
     border-left: 3px solid var(--accent-blue); background: rgba(22,27,34,0.6); 
     padding: 10px 15px; margin-bottom: 15px; color: var(--text-primary); 
     font-size: 0.9rem; border-radius: 4px; font-style: italic; line-height: 1.4; 
   }
 
-  /* --- 核心布局调整 (关键!) --- */
-  .grid { 
-    display: flex; 
-    gap: 15px; /* 默认间距 */
-    align-items: flex-start; 
-    /* 关键：保持flex布局，不让它变成column */
-  }
-  
-  .col { 
-    flex: 1; /* 确保两列等宽 */
-    display: flex; flex-direction: column; gap: 8px; 
-    min-width: 0; /* 防止内容撑破容器 */
-  }
-  
+  .grid { display: flex; gap: 15px; align-items: flex-start; }
+  .col { flex: 1; display: flex; flex-direction: column; gap: 8px; min-width: 0; }
   .col h4 { font-size: 1rem; margin-bottom: 5px; }
 
-  /* 按钮样式优化 */
   .btn { 
     width: 100%; padding: 12px 12px; border: none; border-radius: 8px; 
     font-weight: bold; color: #fff; cursor: pointer; 
@@ -72,16 +57,15 @@
     font-size: 0.9rem; transition: all 0.2s;
     box-shadow: 0 2px 4px rgba(0,0,0,0.2);
     touch-action: manipulation; -webkit-tap-highlight-color: transparent;
-    box-sizing: border-box; /* 确保内边距不影响宽度 */
+    box-sizing: border-box; 
   }
   .btn:active { transform: scale(0.97); filter: brightness(0.9); }
   
   .btn.g { background: linear-gradient(135deg, #238636, #2ea043); border: 1px solid var(--accent-green); } 
   .btn.b { background: linear-gradient(135deg, #da3633, #f85149); border: 1px solid var(--accent-red); }
-  .btn span { white-space: nowrap; /* 防止文字换行 */ }
+  .btn span { white-space: nowrap; }
   .tag { background: rgba(0,0,0,0.25); padding: 2px 6px; border-radius: 4px; font-size: 0.75em; font-family: monospace; min-width: 22px; text-align: center; margin-left: 5px;}
 
-  /* 功德树画布 - 高度平衡 */
   .canvas-box { 
     position: relative; width: 100%; height: 320px; margin-top: 20px;
     background: radial-gradient(circle at bottom, #21262d 0%, #0d1117 70%); 
@@ -90,7 +74,6 @@
   }
   canvas { display: block; width: 100%; height: 100%; }
 
-  /* 底部工具栏 */
   .bar { 
     position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
     background: rgba(13, 17, 23, 0.9); backdrop-filter: blur(10px); 
@@ -100,7 +83,6 @@
   .icon-btn { background: none; border: none; font-size: 1.5rem; cursor: pointer; padding: 0; transition: transform 0.2s; filter: grayscale(0.3); color: var(--text-primary);}
   .icon-btn:hover { transform: scale(1.15); filter: grayscale(0); }
 
-  /* 统计弹窗 */
   .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 999; justify-content: center; align-items: center; backdrop-filter: blur(5px); }
   .modal-content { background: var(--bg-secondary); width: 90%; max-width: 450px; padding: 20px; border-radius: 16px; border: 1px solid var(--border-color); max-height: 85vh; overflow-y: auto; }
   .chart-box { margin-bottom: 20px; border-bottom: 1px dashed var(--border-color); padding-bottom: 15px; }
@@ -109,24 +91,13 @@
   .heatmap-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(10px, 1fr)); gap: 3px; }
   .heatmap-cell { aspect-ratio: 1; border-radius: 2px; background: #21262d; }
 
-  /* =========================================
-     移动端专属优化 (关键修改点)
-  ========================================= */
   @media (max-width: 768px) {
-    body { padding: 10px; } /* 减少边缘留白 */
-    
-    /* 1. 强制保持双栏并排，但减小间距 */
+    body { padding: 10px; } 
     .grid { gap: 8px; } 
-
-    /* 2. 缩小按钮字体和内边距，适应窄屏 */
     .btn { padding: 10px 6px; font-size: 0.8rem; }
     .tag { font-size: 0.7em; padding: 1px 4px; }
     .col h4 { font-size: 0.9rem; }
-
-    /* 3. 调整画布高度，使其与上方按钮区域视觉平衡 */
     .canvas-box { height: 280px; margin-top: 15px; }
-
-    /* 其他微调 */
     #score { font-size: 3rem; }
     .app-title { font-size: 1.1rem; }
     .bar { padding: 8px 20px; gap: 20px; bottom: 15px;}
@@ -137,7 +108,7 @@
 
 <div id="app">
   <div class="header-box">
-    <div class="app-title">赛博修仙 · 观心鉴</div>
+    <div class="app-title">赛博修仙 · 功过鉴</div>
     <div id="score">0</div>
     <div class="sub-title">起心动念 · 皆是因果</div>
   </div>
@@ -167,7 +138,7 @@
       <button class="btn b" onclick="doAct(0)"><span>抱怨埋怨</span><span class="tag">-1</span></button>
       <button class="btn b" onclick="doAct(0)"><span>推脱责任</span><span class="tag">-1</span></button>
       <button class="btn b" onclick="doAct(0)"><span>拖延懈怠</span><span class="tag">-1</span></button>
-      <button class="btn b" onclick="doAct(0)"><span>贪吃贪睡</span><span class="tag">-1</span></button>
+      <button class="btn b" onclick="doAct(0)"><span>贪睡贪吃</span><span class="tag">-1</span></button>
       <button class="btn b" onclick="doAct(0)"><span>恶语伤人</span><span class="tag">-1</span></button>
       <button class="btn b" onclick="doAct(0)"><span>沉迷享乐</span><span class="tag">-1</span></button>
       <button class="btn b" onclick="doAct(0)"><span>怂恿恶行</span><span class="tag">-1</span></button>
@@ -219,7 +190,7 @@ const QUOTES = [
   "莫以善小而不为，莫以恶小而为之。", "一念嗔心起，百万障门开。觉察即是关闭障门。", 
   "最好的休息，是换个领域进行深度专注。"
 ];
-const KEY = 'GONGDE_V8_UI';
+const KEY = 'GONGDE_V8_1'; // 更新Key以防旧缓存干扰
 
 // ==================== 状态与变量 ====================
 let state = { score: 0, leafs: 0, dead: 0, dailyGood: 0, dailyBad: 0, lastDate: new Date().toDateString(), history: [] };
@@ -235,8 +206,28 @@ function init() {
     if(s) state = { ...state, ...JSON.parse(s) };
   } catch(e) { console.error(e); safeMode = true; }
   
-  checkNewDay(); updateUI(); updateQuote(); resizeCanvas();
+  checkNewDay(); 
+  updateUI(); 
+  updateQuote(); 
+  resizeCanvas();
+  
+  // 关键修复：初始化时，根据 state.dead 数量，一次性恢复地面的叶子
+  restoreGroundLeaves();
+  
   if(ctx) requestAnimationFrame(loop);
+}
+
+// 修复函数：根据记录的恶行数量，恢复地面叶子
+function restoreGroundLeaves() {
+  ground = []; // 清空重置
+  const count = Math.min(state.dead, 400); // 限制最大数量防止卡顿
+  for(let i = 0; i < count; i++) {
+    ground.push({
+      x: Math.random() * cvs.width,
+      y: cvs.height - 5 + Math.random() * 8, // 随机分布在底部
+      r: Math.random() * 6
+    });
+  }
 }
 
 function checkNewDay() {
@@ -254,6 +245,7 @@ window.doAct = function(isGood) {
   checkNewDay();
   if(isGood) { state.score += 100; state.leafs++; state.dailyGood++; }
   else {
+    // 恶行逻辑
     if(state.leafs > 0) { state.leafs--; state.dead++; dropLeaf(false); }
     else { state.dead++; dropLeaf(true); }
     state.score -= 50; state.dailyBad++;
@@ -296,26 +288,58 @@ function renderCharts() {
 }
 
 // ==================== 视觉引擎 ====================
-function resizeCanvas() { if(cvs.parentElement) { cvs.width=cvs.parentElement.clientWidth; cvs.height=cvs.parentElement.clientHeight; }}
+function resizeCanvas() { 
+  if(cvs.parentElement) { 
+    cvs.width=cvs.parentElement.clientWidth; 
+    cvs.height=cvs.parentElement.clientHeight; 
+    // 调整大小后重新分布地面叶子，防止看起来奇怪
+    restoreGroundLeaves();
+  }
+}
+
 function loop() {
   ctx.clearRect(0,0,cvs.width,cvs.height);
+  
+  // 画树
   tips=[]; ctx.strokeStyle='#4a5a6a'; ctx.lineWidth=6; ctx.lineCap='round';
   drawBranch(cvs.width/2, cvs.height, 70, -90, 5);
+  
+  // 画金叶
   ctx.fillStyle=varCSS('--accent-gold');
-  const dc=Math.min(state.leafs,400); for(let i=0;i<dc;i++){const t=tips[(i*13)%tips.length]; if(t){const ox=Math.sin(i*11)*15;const oy=Math.cos(i*23)*15;ctx.beginPath();ctx.arc(t.x+ox,t.y+oy,3,0,Math.PI*2);ctx.fill();}}
+  const dc=Math.min(state.leafs,400); 
+  for(let i=0;i<dc;i++){const t=tips[(i*13)%tips.length]; if(t){const ox=Math.sin(i*11)*15;const oy=Math.cos(i*23)*15;ctx.beginPath();ctx.arc(t.x+ox,t.y+oy,3,0,Math.PI*2);ctx.fill();}}
+  
+  // 画枯叶 (地面)
   ctx.fillStyle='#8b5a2b';
-  if(ground.length<Math.min(state.dead,300)) ground.push({x:Math.random()*cvs.width,y:cvs.height-5+Math.random()*8,r:Math.random()*6});
-  ground.forEach(g=>{ctx.save();ctx.translate(g.x,g.y);ctx.rotate(g.r);ctx.fillRect(-3,-2,6,4);ctx.restore();});
-  for(let i=drops.length-1;i>=0;i--){let d=drops[i];d.y+=2;d.x+=Math.sin(d.y/25);d.r+=0.1;ctx.save();ctx.translate(d.x,d.y);ctx.rotate(d.r);ctx.fillRect(-3,-2,6,4);ctx.restore();if(d.y>cvs.height)drops.splice(i,1);}
+  ground.forEach(g=>{
+    ctx.save(); ctx.translate(g.x,g.y); ctx.rotate(g.r); 
+    ctx.fillRect(-3,-2,6,4); ctx.restore();
+  });
+  
+  // 画飘落 (动画)
+  for(let i=drops.length-1;i>=0;i--){
+    let d=drops[i]; d.y+=2; d.x+=Math.sin(d.y/25); d.r+=0.1;
+    ctx.save(); ctx.translate(d.x,d.y); ctx.rotate(d.r); ctx.fillRect(-3,-2,6,4); ctx.restore();
+    
+    // 关键修复：落地后直接加入地面数组
+    if(d.y > cvs.height - 5) {
+      ground.push({x: d.x, y: cvs.height - 5 + Math.random()*5, r: d.r});
+      drops.splice(i,1); // 从飘落队列移除
+    }
+  }
+  
   requestAnimationFrame(loop);
 }
+
 function drawBranch(x,y,l,a,d){const r=a*Math.PI/180;const ex=x+l*Math.cos(r);const ey=y+l*Math.sin(r);ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(ex,ey);ctx.stroke();if(d>0){ctx.lineWidth*=0.75;drawBranch(ex,ey,l*0.75,a-22,d-1);drawBranch(ex,ey,l*0.75,a+22,d-1);ctx.lineWidth/=0.75;}else{tips.push({x:ex,y:ey});}}
+
 function dropLeaf(v){let x=cvs.width/2,y=80;if(!v&&tips.length>0){const t=tips[Math.floor(Math.random()*tips.length)];x=t.x;y=t.y;}drops.push({x:x,y:y,r:0});}
+
 function varCSS(n) { return getComputedStyle(document.documentElement).getPropertyValue(n).trim(); }
 
 // ==================== IO ====================
 window.exportData=function(){prompt("备份码:",btoa(JSON.stringify(state)));};
-window.importData=function(){const s=prompt("粘贴备份码:");if(s)try{state=JSON.parse(atob(s));save();alert("已恢复");}catch(e){alert("无效");}};
+window.importData=function(){const s=prompt("粘贴备份码:");if(s)try{state=JSON.parse(atob(s));save();alert("已恢复");location.reload();}catch(e){alert("无效");}};
 window.hardReset=function(){if(confirm("清空数据？")){localStorage.removeItem(KEY);location.reload();}};
 
 window.onload = init;
