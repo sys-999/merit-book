@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>赛博修仙 V6.0</title>
+<title>赛博修仙 V6.1</title>
 <style>
   body { font-family: -apple-system, sans-serif; background: #0d1117; color: #c9d1d9; margin: 0; padding: 10px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
   #app { width: 100%; max-width: 600px; padding-bottom: 80px; }
@@ -16,14 +16,17 @@
   
   .quote-box { border-left: 3px solid #58a6ff; background: #161b22; padding: 12px; margin-bottom: 20px; color: #8b949e; font-size: 0.9rem; border-radius: 4px; }
 
-  /* 按钮布局 */
-  .grid { display: flex; gap: 15px; }
+  /* 按钮布局 - V6.1 优化 */
+  .grid { display: flex; gap: 15px; align-items: flex-start; }
   .col { flex: 1; }
-  .btn { width: 100%; padding: 14px 10px; margin-bottom: 10px; border: none; border-radius: 8px; font-weight: bold; color: #fff; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-size: 0.95rem; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
-  .btn:active { transform: scale(0.98); }
-  .btn.g { background: #238636; } 
-  .btn.b { background: #da3633; }
-  .tag { background: rgba(0,0,0,0.2); padding: 2px 6px; border-radius: 4px; font-size: 0.8em; }
+  
+  /* 按钮样式优化 */
+  .btn { width: 100%; padding: 12px 8px; margin-bottom: 8px; border: none; border-radius: 8px; font-weight: bold; color: #fff; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-size: 0.9rem; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
+  .btn:active { transform: scale(0.96); }
+  .btn span:first-child { text-align: left; }
+  .btn.g { background: #238636; border: 1px solid #2ea043; } 
+  .btn.b { background: #da3633; border: 1px solid #f85149; }
+  .tag { background: rgba(0,0,0,0.25); padding: 2px 6px; border-radius: 4px; font-size: 0.8em; min-width: 20px; text-align: center; }
 
   /* 画布 */
   .canvas-box { position: relative; width: 100%; height: 300px; background: radial-gradient(circle at bottom, #1c2128, #0d1117); border-radius: 12px; border: 1px solid #30363d; overflow: hidden; margin-top: 15px; }
@@ -40,7 +43,7 @@
 
 <div id="app">
   <div class="header-box">
-    <div style="font-size: 1.1em; color: #c9d1d9;">🍂 赛博修仙 V6.0</div>
+    <div style="font-size: 1.1em; color: #c9d1d9;">🍂 赛博修仙 V6.1</div>
     <div id="score">0</div>
     <div style="font-size: 0.8em; opacity: 0.6;">功德金叶</div>
   </div>
@@ -50,25 +53,36 @@
   <div class="grid">
     <div class="col">
       <h4 style="text-align:center; color:#3fb950; margin:0 0 10px 0;">✨ 积善</h4>
-      <button class="btn g" onclick="doAct(1)"><span>专注工作/禅修</span><span class="tag">+1</span></button>
-      <button class="btn g" onclick="doAct(1)"><span>念佛/帮人</span><span class="tag">+1</span></button>
-      <button class="btn g" onclick="doAct(1)"><span>赞美/感恩</span><span class="tag">+1</span></button>
-      <button class="btn g" onclick="doAct(1)"><span>自省/早起</span><span class="tag">+1</span></button>
-      <button class="btn g" onclick="doAct(1)"><span>真诚道歉/自我激励</span><span class="tag">+1</span></button>
+      <button class="btn g" onclick="doAct(1)"><span>专注工作</span><span class="tag">+1</span></button>
+      <button class="btn g" onclick="doAct(1)"><span>禅修打坐</span><span class="tag">+1</span></button>
+      <button class="btn g" onclick="doAct(1)"><span>念佛持咒</span><span class="tag">+1</span></button>
+      <button class="btn g" onclick="doAct(1)"><span>布施助人</span><span class="tag">+1</span></button>
+      <button class="btn g" onclick="doAct(1)"><span>赞美鼓励</span><span class="tag">+1</span></button>
+      <button class="btn g" onclick="doAct(1)"><span>感恩惜福</span><span class="tag">+1</span></button>
+      <button class="btn g" onclick="doAct(1)"><span>每日自省</span><span class="tag">+1</span></button>
+      <button class="btn g" onclick="doAct(1)"><span>勤奋早起</span><span class="tag">+1</span></button>
+      <button class="btn g" onclick="doAct(1)"><span>真诚道歉</span><span class="tag">+1</span></button>
+      <button class="btn g" onclick="doAct(1)"><span>自我激励</span><span class="tag">+1</span></button>
     </div>
+
     <div class="col">
       <h4 style="text-align:center; color:#f85149; margin:0 0 10px 0;">🍂 觉察</h4>
-      <button class="btn b" onclick="doAct(0)"><span>说人是非/推脱责任</span><span class="tag">-1</span></button>
-      <button class="btn b" onclick="doAct(0)"><span>发脾气/傲慢</span><span class="tag">-1</span></button>
-      <button class="btn b" onclick="doAct(0)"><span>抱怨/拖延</span><span class="tag">-1</span></button>
-      <button class="btn b" onclick="doAct(0)"><span>贪睡/怂恿</span><span class="tag">-1</span></button>
-      <button class="btn b" onclick="doAct(0)"><span>恶语/沉迷</span><span class="tag">-1</span></button>
+      <button class="btn b" onclick="doAct(0)"><span>说人是非</span><span class="tag">-1</span></button>
+      <button class="btn b" onclick="doAct(0)"><span>发脾气</span><span class="tag">-1</span></button>
+      <button class="btn b" onclick="doAct(0)"><span>傲慢轻视</span><span class="tag">-1</span></button>
+      <button class="btn b" onclick="doAct(0)"><span>抱怨埋怨</span><span class="tag">-1</span></button>
+      <button class="btn b" onclick="doAct(0)"><span>推脱责任</span><span class="tag">-1</span></button>
+      <button class="btn b" onclick="doAct(0)"><span>拖延懈怠</span><span class="tag">-1</span></button>
+      <button class="btn b" onclick="doAct(0)"><span>贪睡贪吃</span><span class="tag">-1</span></button>
+      <button class="btn b" onclick="doAct(0)"><span>恶语伤人</span><span class="tag">-1</span></button>
+      <button class="btn b" onclick="doAct(0)"><span>沉迷享乐</span><span class="tag">-1</span></button>
+      <button class="btn b" onclick="doAct(0)"><span>怂恿恶行</span><span class="tag">-1</span></button>
     </div>
   </div>
 
   <div class="canvas-box">
     <canvas id="cvs"></canvas>
-    <div style="position:absolute; bottom:5px; right:10px; font-size:10px; color:#555;">V6.0 安全版</div>
+    <div style="position:absolute; bottom:5px; right:10px; font-size:10px; color:#555;">V6.1 独立版</div>
   </div>
 </div>
 
@@ -79,7 +93,7 @@
 </div>
 
 <script>
-// --- 1. 错误捕获系统 ---
+// --- 错误捕获 ---
 window.onerror = function(msg, url, line) {
   const div = document.getElementById('debug-console');
   div.style.display = 'block';
@@ -87,24 +101,33 @@ window.onerror = function(msg, url, line) {
   return false;
 };
 
-// --- 2. 核心逻辑 ---
+// --- 核心逻辑 ---
 const KEY = 'GONGDE_V6_SAFE';
-const QUOTES = ["觉察当下，是唯一能改变未来的力量。", "你所经历的每件事，都由你过去的每一个点击所塑造。", "我们无法控制外在世界，但对自身念头，拥有绝对的主权。", "《金刚经》：凡所有相，皆是虚妄。若见诸相非相，即见如来。", "把每一次分心，看作一次提醒，而非一次失败。", "善恶之报，如影随形；不是不报，时候未到。", "习惯的力量在于复利，每天1%的进步，一年是37倍的差距。", "心如工画师，能画诸世间。", "如果一件事令你痛苦，那么使你痛苦的并非这件事本身，而是你对它的判断。", "莫以善小而不为，莫以恶小而为之。", "一念嗔心起，百万障门开。觉察即是关闭障门。", 
-"最好的休息，是换个领域进行深度专注。"];
+const Quotes = ["觉察当下，是唯一能改变未来的力量。",
+           "你所经历的每件事，都由你过去的每一个点击所塑造。",
+           "我们无法控制外在世界，但对自身念头，拥有绝对的主权。",
+           "《金刚经》：凡所有相，皆是虚妄。若见诸相非相，即见如来。",
+           "把每一次分心，看作一次提醒，而非一次失败。",
+           "善恶之报，如影随形；不是不报，时候未到。",
+           "习惯的力量在于复利，每天1%的进步，一年是37倍的差距。",
+           "心如工画师，能画诸世间。",
+           "如果一件事令你痛苦，那么使你痛苦的并非这件事本身，而是你对它的判断。",
+           "莫以善小而不为，莫以恶小而为之。"
+            "一念嗔心起，百万障门开。觉察即是关闭障门。",
+            "最好的休息，是换个领域进行深度专注。"];
 
-let state = { score: 0, leafs: 0, dead: 0 }; // 默认状态
+let state = { score: 0, leafs: 0, dead: 0 };
 let safeMode = false;
 
-// 启动
 function init() {
   try {
     const s = localStorage.getItem(KEY);
     if(s) state = JSON.parse(s);
   } catch(e) {
     console.error(e);
-    safeMode = true; // 开启安全模式（不存盘）
+    safeMode = true; 
     document.getElementById('debug-console').style.display = 'block';
-    document.getElementById('debug-console').innerHTML += "⚠️ 提示: 无法读取存储，已开启临时模式。<br>";
+    document.getElementById('debug-console').innerHTML += "⚠️ 存储不可用，开启临时模式。<br>";
   }
   
   updateUI();
@@ -113,7 +136,6 @@ function init() {
   requestAnimationFrame(loop);
 }
 
-// 交互
 window.doAct = function(isGood) {
   if(isGood) {
     state.score += 100; state.leafs++;
@@ -125,7 +147,6 @@ window.doAct = function(isGood) {
   save();
   updateUI();
   updateQuote();
-  // 震动
   if(navigator.vibrate) navigator.vibrate(50);
 };
 
@@ -143,7 +164,7 @@ function updateQuote() {
   document.getElementById('quote').innerText = "💡 " + t;
 }
 
-// --- 3. 视觉系统 ---
+// --- 视觉系统 ---
 const cvs = document.getElementById('cvs');
 const ctx = cvs.getContext('2d');
 let tips = [], drops = [], ground = [];
@@ -162,7 +183,7 @@ function loop() {
   ctx.strokeStyle = '#3e4c5e'; ctx.lineWidth = 6; ctx.lineCap = 'round';
   drawBranch(cvs.width/2, cvs.height, 70, -90, 5);
 
-  // 2. 金叶 (限制数量防止卡顿)
+  // 2. 金叶 (上限400防止卡顿)
   ctx.fillStyle = '#ffd700';
   const drawCount = Math.min(state.leafs, 400);
   for(let i=0; i<drawCount; i++) {
@@ -174,21 +195,15 @@ function loop() {
     }
   }
 
-  // 3. 落叶动画
+  // 3. 落叶
   ctx.fillStyle = '#8b5a2b';
-  // 地面堆积
   if(ground.length < Math.min(state.dead, 200)) {
-    ground.push({
-      x: Math.random() * cvs.width,
-      y: cvs.height - 5 + Math.random()*5,
-      r: Math.random() * 6
-    });
+    ground.push({ x: Math.random() * cvs.width, y: cvs.height - 5 + Math.random()*5, r: Math.random() * 6 });
   }
   ground.forEach(g => {
     ctx.save(); ctx.translate(g.x, g.y); ctx.rotate(g.r); ctx.fillRect(-3,-2,6,4); ctx.restore();
   });
 
-  // 飘落过程
   for(let i = drops.length - 1; i >= 0; i--) {
     let d = drops[i];
     d.y += 1.5; d.x += Math.sin(d.y/20); d.r += 0.1;
@@ -203,17 +218,13 @@ function drawBranch(x, y, len, angle, depth) {
   const rad = angle * Math.PI / 180;
   const ex = x + len * Math.cos(rad);
   const ey = y + len * Math.sin(rad);
-  
   ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(ex, ey); ctx.stroke();
-  
   if(depth > 0) {
     ctx.lineWidth *= 0.75;
     drawBranch(ex, ey, len*0.75, angle - 20, depth - 1);
     drawBranch(ex, ey, len*0.75, angle + 20, depth - 1);
     ctx.lineWidth /= 0.75;
-  } else {
-    tips.push({x: ex, y: ey});
-  }
+  } else { tips.push({x: ex, y: ey}); }
 }
 
 function dropLeaf(fromVoid) {
@@ -225,7 +236,7 @@ function dropLeaf(fromVoid) {
   drops.push({x: x, y: y, r: 0});
 }
 
-// --- 4. 数据功能 ---
+// --- 数据功能 ---
 window.exportData = function() {
   const str = btoa(JSON.stringify(state));
   prompt("复制备份码:", str);
@@ -238,15 +249,10 @@ window.importData = function() {
   }
 };
 window.hardReset = function() {
-  if(confirm("确定清空重置？")) {
-    localStorage.removeItem(KEY);
-    location.reload();
-  }
+  if(confirm("确定清空重置？")) { localStorage.removeItem(KEY); location.reload(); }
 };
 
-// 启动
 window.onload = init;
-// 窗口调整时重置画布
 window.onresize = resizeCanvas;
 </script>
 </body>
